@@ -1,1 +1,1 @@
-# eds-tools
+# Elastic Degenerate Strings - Toolkit
