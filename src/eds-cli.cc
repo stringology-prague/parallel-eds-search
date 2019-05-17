@@ -7,7 +7,15 @@
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
+#include <ElasticDegenerateString.h>
+
 namespace po = boost::program_options;
+
+enum class ERR
+{
+    SUCCESS,
+    INVALID_ARGS
+};
 
 int main(int argc, const char **argv) {
 
@@ -67,4 +75,18 @@ int main(int argc, const char **argv) {
     std::copy(patterns.begin(), patterns.end(), std::ostream_iterator<std::string>(std::cout, " "));
     std::cout << std::endl;
 
+    if (operation == "info")
+    {
+        if (eds_files.size() == 0)
+        {
+            std::cerr << "Missing EDS files specified (eds_files)! " << std::endl;
+            return static_cast<int>(ERR::INVALID_ARGS);
+        }
+
+        std::ifstream ifs (eds_files.at(0), std::ios::binary);
+        ElasticDegenerateString eds = ElasticDegenerateString::LoadString(ifs);
+        std::cout << eds;
+    }
+
+    return static_cast<int>(ERR::SUCCESS);
 }
