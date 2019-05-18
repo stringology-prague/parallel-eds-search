@@ -66,15 +66,6 @@ int main(int argc, const char **argv) {
         return 0;
     }
 
-    std::cout << "seed: " << seed << std::endl;
-    std::cout << "operation: " << operation << std::endl;
-    std::cout << "eds_files: ";
-    std::copy(eds_files.begin(), eds_files.end(), std::ostream_iterator<std::string>(std::cout, " "));
-    std::cout << std::endl;
-    std::cout << "patterns: ";
-    std::copy(patterns.begin(), patterns.end(), std::ostream_iterator<std::string>(std::cout, " "));
-    std::cout << std::endl;
-
     if (operation == "info")
     {
         if (eds_files.size() == 0)
@@ -84,7 +75,8 @@ int main(int argc, const char **argv) {
         }
 
         std::ifstream ifs (eds_files.at(0), std::ios::binary);
-        ElasticDegenerateString eds = ElasticDegenerateString::LoadString(ifs);
+        ElasticDegenerateString eds;
+        ifs >> eds;
         std::cout << eds;
     }
 

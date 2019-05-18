@@ -29,7 +29,9 @@ public:
     template <class Archive>
     void save(Archive &ar, const unsigned int version) const;
 
-    static ElasticDegenerateString LoadString(std::istream &is);
+    static ElasticDegenerateString LoadFromString(std::istream &is);
+
+    static void SaveToString(const ElasticDegenerateString& eds, std::ostream &os);
 
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 
