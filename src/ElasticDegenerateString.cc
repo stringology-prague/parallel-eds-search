@@ -2,6 +2,40 @@
 
 #include <algorithm>
 #include <iterator>
+#include <utility>
+
+const ElasticDegenerateString::VariantRange ElasticDegenerateString::GetSegment(SegmentId sid) const
+{
+    return segment_index_.at(sid);
+}
+
+const ElasticDegenerateString::DataRange ElasticDegenerateString::GetVariant(VariantId vid) const
+{
+    size_t dataBegin = variant_index_.at(vid).first;
+    size_t dataEnd = variant_index_.at(vid).second;
+    return std::make_pair<const uint8_t*,const uint8_t*>(data_.data() + dataBegin, data_.data() + dataEnd);
+}
+
+size_t ElasticDegenerateString::Size() const
+{
+    return data_.size();
+}
+
+size_t ElasticDegenerateString::Segments() const
+{
+    return segment_index_.size();
+}
+
+size_t ElasticDegenerateString::SegmentSize(SegmentId sid) const
+{
+    VariantRange segment = GetSegment(sid);
+    return segment.second - segment.first;
+}
+
+size_t ElasticDegenerateString::VariantSize(VariantId vid) const
+{
+    return variant_index_.at(vid).second - variant_index_.at(vid).first;
+}
 
 ElasticDegenerateString ElasticDegenerateString::LoadFromString(std::istream &is) {
 

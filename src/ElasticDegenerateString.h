@@ -8,8 +8,14 @@
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/split_member.hpp>
 
+
 class ElasticDegenerateString {
 public:
+
+    using SegmentId = size_t;
+    using VariantId = size_t;
+    using VariantRange = std::pair<VariantId,VariantId>;
+    using DataRange = std::pair<const uint8_t*,const uint8_t*>;
 
     ElasticDegenerateString() = default;
 
@@ -22,6 +28,18 @@ public:
     ElasticDegenerateString& operator=(ElasticDegenerateString&&) = default;
 
     ~ElasticDegenerateString() = default;
+
+    size_t Size() const;
+
+    size_t Segments() const;
+
+    const VariantRange GetSegment(SegmentId sid) const;
+
+    size_t SegmentSize(SegmentId sid) const;
+
+    const DataRange GetVariant(VariantId vid) const;
+
+    size_t VariantSize(VariantId variant) const;
 
     template <class Archive>
     void load(Archive &ar, const unsigned int version);
@@ -40,11 +58,11 @@ private:
     std::vector<uint8_t> data_;
     using span_t = std::pair<size_t,size_t>;
 
-    // Variant index into data - each entry delimits a substring representing a variant
+    // Segment index into the variant index - each entry delimits variants belonging to a segment
 //    using variant_span_t = std::pair<decltype(data_)::const_iterator,decltype(data_)::const_iterator>;
     std::vector<span_t> segment_index_;
 
-    // Segment index into the variant index - each entry delimits variants belonging to a segment
+    // Variant index into data - each entry delimits a substring representing a variant
 //    using segment_index_span_t = std::pair<decltype(segment_index_)::const_iterator,decltype(segment_index_)::const_iterator>;
     std::vector<span_t> variant_index_;
 
