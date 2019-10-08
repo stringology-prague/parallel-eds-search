@@ -1,5 +1,5 @@
 ## GENERAL PROJECT SETTINGS
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 project("eds-tools"
         VERSION 0.1
@@ -10,6 +10,7 @@ enable_testing()
 include(CheckCXXCompilerFlag)
 include(ExternalProject)
 include(cmake/color_print.cmake)
+include(FetchContent)
 
 
 ## PROJECT OPTIONS
@@ -70,6 +71,14 @@ find_package(Boost 1.63.0 REQUIRED COMPONENTS ${Boost_COMPONETNS})
 
 ## Bzip2
 find_package(BZip2 REQUIRED)
+
+
+## googletest
+FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG        release-1.10.0
+)
 
 ## Global include directories
 include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/src ${Boost_INCLUDE_DIR})
