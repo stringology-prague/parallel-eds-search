@@ -46,7 +46,7 @@ std::unordered_set<unsigned> SopangMatcher::Match(const ElasticDegenerateString 
             dBuffer[vid] = D;
 
             ElasticDegenerateString::DataRange variant = eds.GetVariant(segment.first + vid);
-            size_t variantSize = eds.VariantSize(vid);
+            size_t variantSize = eds.VariantSize(segment.first + vid);
 
             // For all characters in a variant
             for (size_t cid = 0; cid < variantSize; ++cid)
