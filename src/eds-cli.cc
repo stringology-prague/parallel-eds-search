@@ -75,10 +75,7 @@ int main(int argc, const char **argv) {
             return static_cast<int>(ERR::INVALID_ARGS);
         }
 
-        std::ifstream ifs(eds_files.at(0), std::ios::binary);
-        ElasticDegenerateString eds;
-        ifs >> eds;
-        std::cout << eds;
+        ElasticDegenerateString eds = eds::util::ReadEDSFile(eds_files.at(0));
 
     } else if (operation == "match") {
         if (eds_files.size() == 0) {
@@ -96,9 +93,7 @@ int main(int argc, const char **argv) {
         if (vm.count("verbose"))
             std::cout << "Using Sopang matcher" << std::endl;
 
-        std::ifstream ifs(eds_files.at(0), std::ios::binary);
-        ElasticDegenerateString eds;
-        ifs >> eds;
+        ElasticDegenerateString eds = eds::util::ReadEDSFile(eds_files.at(0));
 
         if (vm.count("verbose"))
             std::cout << "Loaded EDS from file " << eds_files.at(0) << " (size " << eds.Size() << ")" << std::endl;

@@ -9,6 +9,7 @@
 
 #include <SopangMatcher.h>
 #include <ElasticDegenerateString.h>
+#include <Util.h>
 
 class SopangMatcherTest
         : public testing::TestWithParam<std::tuple<std::shared_ptr<const ElasticDegenerateString>, std::string, std::set<unsigned>>> {
@@ -18,34 +19,6 @@ public:
     void TearDown() override {}
 
     SopangMatcher matcher_;
-
-    static ElasticDegenerateString ReadEDSFile(const std::string &filename) {
-        std::ifstream ifs(filename, std::ios::binary);
-        ElasticDegenerateString eds;
-        ifs >> eds;
-        return eds;
-    }
-
-    static std::vector<std::string> ReadPatternFile(const std::string &filename) {
-        std::ifstream ifs(filename, std::ios::binary);
-        std::vector<std::string> patterns;
-        std::copy(std::istream_iterator<std::string>(ifs),
-                  std::istream_iterator<std::string>(),
-                  std::back_inserter(patterns));
-        return patterns;
-    }
-
-    static std::vector<std::set<unsigned>> ReadResultsFile(const std::string &filename) {
-        std::ifstream ifs(filename, std::ios::binary);
-        std::string line;
-        std::vector<std::set<unsigned>> results;
-        while (std::getline(ifs, line)) {
-            std::istringstream iss(line);
-            results.push_back(
-                    std::set<unsigned>((std::istream_iterator<unsigned>(iss)), std::istream_iterator<unsigned>()));
-        }
-        return results;
-    }
 
     static std::vector<std::tuple<std::shared_ptr<const ElasticDegenerateString>, std::string, std::set<unsigned>>>
     GenerateTestSuiteValues() {
@@ -58,9 +31,9 @@ public:
         };
         std::vector<std::tuple<std::shared_ptr<const ElasticDegenerateString>, std::string, std::set<unsigned>>> cases;
         for (auto fileTuple : files) {
-            auto eds = std::make_shared<const ElasticDegenerateString>(ReadEDSFile(std::get<0>(fileTuple)));
-            auto patterns = ReadPatternFile(std::get<1>(fileTuple));
-            auto results = ReadResultsFile(std::get<2>(fileTuple));
+            auto eds = std::make_shared<const ElasticDegenerateString>(eds::util::ReadEDSFile(std::get<0>(fileTuple)));
+            auto patterns = eds::util::ReadPatternFile(std::get<1>(fileTuple));
+            auto results = eds::util::ReadResultsFile(std::get<2>(fileTuple));
             if (patterns.size() != results.size()) {
                 throw std::logic_error("Test initialisation failure - mismatch in patterns and results size");
             }
