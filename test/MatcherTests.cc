@@ -23,11 +23,11 @@ public:
     static std::vector<std::tuple<std::shared_ptr<const ElasticDegenerateString>, std::string, std::set<unsigned>>>
     GenerateTestSuiteValues() {
         std::vector<std::tuple<std::string, std::string, std::string>> files = {
-                {"data/chr1337.eds", "data/pattern8.txt",   "data/result8.txt"},
-                {"data/chr1337.eds", "data/patterns8.txt",  "data/results8.txt"},
-                {"data/chr1337.eds", "data/patterns16.txt", "data/results16.txt"},
-                {"data/chr1337.eds", "data/patterns32.txt", "data/results32.txt"},
-                {"data/chr1337.eds", "data/patterns64.txt", "data/results64.txt"}
+                {"../data/chr1337.eds", "../data/pattern8.txt",   "../data/result8.txt"},
+                {"../data/chr1337.eds", "../data/patterns8.txt",  "../data/results8.txt"},
+                {"../data/chr1337.eds", "../data/patterns16.txt", "../data/results16.txt"},
+                {"../data/chr1337.eds", "../data/patterns32.txt", "../data/results32.txt"},
+                {"../data/chr1337.eds", "../data/patterns64.txt", "../data/results64.txt"}
         };
         std::vector<std::tuple<std::shared_ptr<const ElasticDegenerateString>, std::string, std::set<unsigned>>> cases;
         for (auto fileTuple : files) {
@@ -44,6 +44,7 @@ public:
                 cases.push_back({eds, pattern, result});
             }
         }
+        return cases;
     }
 };
 
@@ -56,7 +57,6 @@ TEST_P(SopangMatcherTest, Match) {
     ASSERT_FALSE(pattern.empty());
 
     std::set<unsigned> expected_res = std::get<2>(GetParam());
-    ASSERT_FALSE(expected_res.empty());
 
     std::unordered_set<unsigned> res = SopangMatcher().Match(*eds, pattern, "ACGT");
     std::set<unsigned> sorted_res(std::begin(res), std::end(res));
