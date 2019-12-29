@@ -1,12 +1,9 @@
 #include <algorithm>
 #include <experimental/iterator>
-#include <fstream>
-#include <sys/stat.h>
 #include <random>
 #include <iostream>
 #include <unordered_set>
 
-#include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
 
 #include <ElasticDegenerateString.h>
