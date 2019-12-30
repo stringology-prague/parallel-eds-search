@@ -37,7 +37,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(FLAGS_WARN "-Wall -Wextra -Wno-unused-parameter -Wno-unused-variable")
 set(CMAKE_C_FLAGS "${FLAGS_WARN}")
-set(CMAKE_CXX_FLAGS "${FLAGS_WARN} -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED")
+set(CMAKE_CXX_FLAGS "${FLAGS_WARN} -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED -msse -msse2 -msse3 -mssse3 -msse4 -msse4a -msse4.1 -msse4.2")
 set(CMAKE_CUDA_FLAGS "--std c++14 --generate-code arch=compute_61,code=sm_61 --relocatable-device-code true --Werror cross-execution-space-call")
 
 # Disable cudafe warning: "type qualifier is meaningless on cast type" occuring in boost::archive
