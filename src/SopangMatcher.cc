@@ -84,6 +84,6 @@ SopangMatcher::SopangMatcher() {
 }
 
 SopangMatcher::~SopangMatcher() {
-    delete dBuffer;
+    delete[] dBuffer;
 }
 
