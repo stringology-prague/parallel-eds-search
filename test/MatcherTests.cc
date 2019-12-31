@@ -8,10 +8,11 @@
 #include <boost/range/combine.hpp>
 
 #include <SopangMatcher.h>
+#include <SSEMatcher.h>
 #include <ElasticDegenerateString.h>
 #include <Util.h>
 
-class SopangMatcherTest
+class MatcherTest
         : public testing::TestWithParam<std::tuple<std::shared_ptr<const ElasticDegenerateString>, std::string, std::set<unsigned>>> {
 public:
     void SetUp() override {}
@@ -48,7 +49,7 @@ public:
     }
 };
 
-TEST_P(SopangMatcherTest, Match) {
+TEST_P(MatcherTest, Sopang) {
     std::shared_ptr<const ElasticDegenerateString> eds = std::get<0>(GetParam());
     ASSERT_TRUE(eds->Size() > 0);
     ASSERT_TRUE(eds->Segments() > 0);
@@ -64,6 +65,25 @@ TEST_P(SopangMatcherTest, Match) {
     ASSERT_EQ(sorted_res, expected_res);
 }
 
+TEST_P(MatcherTest, SSE) {
+    std::shared_ptr<const ElasticDegenerateString> eds = std::get<0>(GetParam());
+    ASSERT_TRUE(eds->Size() > 0);
+    ASSERT_TRUE(eds->Segments() > 0);
 
-INSTANTIATE_TEST_SUITE_P(SopangMatcherTestSuite, SopangMatcherTest,
-                         testing::ValuesIn(SopangMatcherTest::GenerateTestSuiteValues()));
+    std::string pattern = std::get<1>(GetParam());
+    ASSERT_FALSE(pattern.empty());
+
+    std::set<unsigned> expected_res = std::get<2>(GetParam());
+
+    std::unordered_set<unsigned> res = eds::match::SSEMatcher("ACGT").Match(*eds, pattern);
+    std::set<unsigned> sorted_res(std::begin(res), std::end(res));
+
+    ASSERT_EQ(sorted_res, expected_res);
+}
+
+
+INSTANTIATE_TEST_SUITE_P(SopangMatcherTestSuite, MatcherTest,
+                         testing::ValuesIn(MatcherTest::GenerateTestSuiteValues()));
+
+INSTANTIATE_TEST_SUITE_P(SSEMatcherTestSuite, MatcherTest,
+                         testing::ValuesIn(MatcherTest::GenerateTestSuiteValues()));

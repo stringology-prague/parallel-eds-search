@@ -43,8 +43,7 @@ eds::match::SSEMatcher::SSEMatcher(const std::string &alphabet) {
 }
 
 std::unordered_set<unsigned>
-eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::string &pattern,
-                              const std::string &alphabet) {
+eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::string &pattern) {
 
     std::array<__m128i,sizeof(char)*8> pattern_mask = alphabet_mask;
 
@@ -79,7 +78,6 @@ eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::str
             for (size_t cid = 0; cid < variantSize; ++cid)
             {
                 const char c = static_cast<const char>(variant.first[cid]);
-                assert(alphabet.find(c) != std::string::npos);
 
                 // Shift variant_match_mask[vid] left by 1, then OR with pattern_mask[c]
                 __m128i vmm = variant_match_mask[vid];
@@ -107,5 +105,10 @@ eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::str
     }
 
     return res;
+}
+
+std::unordered_set<unsigned>
+eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::string &pattern, const std::string &alphabet) {
+    return std::unordered_set<unsigned int>();
 }
 
