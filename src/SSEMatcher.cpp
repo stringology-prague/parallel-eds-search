@@ -5,24 +5,25 @@
 #include <immintrin.h>
 #include <xmmintrin.h>
 #include <ammintrin.h>
+#include <limits>
 
 #include "SSEMatcher.h"
 
-__m128i Calc2ToTheN(int N)
-{
-    __m128i zero = _mm_setzero_si128();
-    __m128i ones = _mm_cmpeq_epi32(zero, zero);
-    __m128i onesLowHigh = _mm_slli_epi64(ones, 63);
-    __m128i singleOne = N < 64 ? _mm_srli_si128(onesLowHigh, 64 / 8) : _mm_slli_si128(onesLowHigh, 64 / 8);
-    return _mm_slli_epi64(singleOne, N & 63);
-}
 __m128i SetBitN(__m128i value, int N)
 {
-    return _mm_or_si128(value, Calc2ToTheN(N));
+    __m128i allzero = _mm_setzero_si128();
+    __m128i allones = _mm_cmpeq_epi32(allzero, allzero);
+    __m128i lowones = _mm_srli_epi64(allones, 63);
+    __m128i one = N < 64 ? _mm_srli_si128(lowones, 64 / 8) : _mm_slli_si128(lowones, 64 / 8);
+    return _mm_or_si128(value, _mm_slli_epi64(one, N & 63));
 }
 __m128i ClearBitN(__m128i value, int N)
 {
-    return _mm_andnot_si128(value, Calc2ToTheN(N));
+    __m128i allzero = _mm_setzero_si128();
+    __m128i allones = _mm_cmpeq_epi32(allzero, allzero);
+    __m128i lowones = _mm_srli_epi64(allones, 63);
+    __m128i one = N < 64 ? _mm_srli_si128(lowones, 64 / 8) : _mm_slli_si128(lowones, 64 / 8);
+    return _mm_andnot_si128(_mm_slli_epi64(one, N & 63), value);
 }
 bool TestBitN(__m128i value, int N)
 {
@@ -45,7 +46,7 @@ eds::match::SSEMatcher::SSEMatcher(const std::string &alphabet) {
 std::unordered_set<unsigned>
 eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::string &pattern) {
 
-    std::array<__m128i,sizeof(char)*8> pattern_mask = alphabet_mask;
+    std::array<__m128i,static_cast<unsigned>(std::numeric_limits<unsigned char>::max())> pattern_mask = alphabet_mask;
 
     // Preprocess pattern mask
     for (unsigned pos = 0; pos < pattern.size(); pos++) {

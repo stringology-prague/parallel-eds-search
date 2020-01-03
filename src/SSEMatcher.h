@@ -15,7 +15,7 @@ namespace match {
         virtual std::unordered_set<unsigned> Match(const ElasticDegenerateString &eds, const std::string &pattern);
 
     protected:
-        std::array<__m128i, sizeof(char) * 8> alphabet_mask;
+        std::array<__m128i, static_cast<unsigned>(std::numeric_limits<unsigned char>::max())> alphabet_mask;
     };
 }
 }
