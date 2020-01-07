@@ -82,8 +82,6 @@ TEST_P(MatcherTest, SSE) {
 }
 
 
-INSTANTIATE_TEST_SUITE_P(SopangMatcherTestSuite, MatcherTest,
+INSTANTIATE_TEST_SUITE_P(MatcherTestSuite, MatcherTest,
                          testing::ValuesIn(MatcherTest::GenerateTestSuiteValues()));
 
-INSTANTIATE_TEST_SUITE_P(SSEMatcherTestSuite, MatcherTest,
-                         testing::ValuesIn(MatcherTest::GenerateTestSuiteValues()));
