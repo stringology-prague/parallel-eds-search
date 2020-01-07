@@ -87,21 +87,19 @@ eds::match::SSEMatcher::Match(const ElasticDegenerateString &eds, const std::str
                                 _mm_srli_epi64(_mm_slli_si128(vmm, 8), 64-1)),
                                         pattern_mask[static_cast<unsigned char>(c)]);
                 // Match occurred.
-                __m128i vmmzero = _mm_cmpeq_epi8(variant_match_mask[vid], _mm_setzero_si128());
-                if (_mm_testz_si128(vmmzero, vmmzero))
+                if (_mm_testz_si128(variant_match_mask[vid],hit_mask))
                 {
                     res.insert(sid);
                 }
             }
         }
 
+        // As a join operation we want to preserve 0s (active states):
+        // a match can occur in any segment alternative.
         match_mask = variant_match_mask[0];
-
         for (unsigned vid = 1; vid < segmentSize; ++vid)
         {
-            // As a join operation we want to preserve 0s (active states):
-            // a match can occur in any segment alternative.
-            match_mask &= variant_match_mask[vid];
+            match_mask = _mm_and_si128(match_mask,variant_match_mask[vid]);
         }
     }
 
